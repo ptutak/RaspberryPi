@@ -19,5 +19,6 @@ while True:
     s.send(command.encode())
     reply = s.recv(1024).decode()
     if reply == 'Terminate':
+        print('Terminating')
         break
     print(reply)

@@ -10,6 +10,9 @@ print('Socket created')
 #managing error exception
 try:
     s.bind((HOST, PORT))
+except socket.error:
+    print('Bind failed ')
+try:
     s.listen(5)
     print('Socket awaiting messages')
     (conn, addr) = s.accept()
@@ -36,5 +39,6 @@ try:
         # Sending reply
         conn.send(reply.encode())
     conn.close() # Close connections
-except socket.error:
-    print('Bind failed ')
+except Exception as e:
+    print(e)
+    conn.close()
