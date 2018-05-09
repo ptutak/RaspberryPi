@@ -14,7 +14,7 @@ except socket.error:
 
 recording=False
 with picamera.PiCamera() as camera:
-    camera.resolution=(1024,768)
+    camera.resolution=(640,480)
 try:
     cameraSocket.listen(5)
     print('Camera waiting for connection')
@@ -25,6 +25,7 @@ try:
     time.sleep(2)
     camera.start_recording(connection,format='h264',quality=23)
     recording=True
+    """
     while True:
         command=connection.recv(1024).decode()
         if command=='stop' and recording:
@@ -35,6 +36,7 @@ try:
             recording=True
         elif command=='quit':
             break
+    """
 except Exception as e:
     print(e)
 finally:
