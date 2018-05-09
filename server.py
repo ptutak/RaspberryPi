@@ -39,4 +39,4 @@ while True:
 
     # Sending reply
     conn.send(reply.encode())
-    conn.close() # Close connections
+conn.close() # Close connections
