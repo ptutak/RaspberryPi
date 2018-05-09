@@ -16,8 +16,8 @@ s.connect((HOST,PORT))
 #Lets loop awaiting for your input
 while True:
     command = input('Enter your command: ')
-    s.send(bytes(command))
-    reply = s.recv(1024)
+    s.send(command.encode())
+    reply = s.recv(1024).decode()
     if reply == 'Terminate':
         break
     print(reply)
