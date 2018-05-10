@@ -4,7 +4,7 @@ import socket
 import picamera
 import time
 
-HOST = 'raspberry'
+HOST = 'http://raspberry'
 PORT_CAMERA = 13000
 cameraSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
