@@ -4,8 +4,8 @@ import socket
 import picamera
 import time
 
-HOST = '192.168.0.199' # Server IP or Hostname
-PORT_CAMERA = 13000 # Pick an open Port (1000+ recommended), must match the client sport
+HOST = 'raspberry'
+PORT_CAMERA = 13000
 cameraSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
     cameraSocket.bind((HOST, PORT_CAMERA))
