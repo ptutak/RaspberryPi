@@ -14,7 +14,6 @@ import time
 import subprocess
 HOST = '192.168.0.199'
 PORT_COMMAND = 12000
-PORT_CAMERA = 13000
 
 #cameraSocket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 #cameraSocket.connect((HOST,PORT_CAMERA))
@@ -52,8 +51,9 @@ class Controls(tk.Frame):
         pass
     def startCameraButtonAction(self,event):
         self.commandSocket.send('startCam'.encode())
+        port=self.commandSocket.recv(1024)
         time.sleep(0.5)
-        vlcRunArgs=['vlc','tcp/h264://'+str(HOST)+':'+str(PORT_CAMERA)]
+        vlcRunArgs=['vlc','tcp/h264://'+str(HOST)+':'+str(port)]
         self.cameraProcess=subprocess.Popen(vlcRunArgs)
     def stopCameraButtonAction(self,event):
         if self.cameraProcess:

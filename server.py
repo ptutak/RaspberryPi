@@ -10,10 +10,10 @@ PORT_COMM = 12000
 PORT_CAMERA = 13000
 
 class CameraThread(threading.Thread):
-    def __init__(self, *args,**kwargs):
+    def __init__(self, port,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.cameraSocket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.cameraSocket.bind((HOST, PORT_CAMERA))
+        self.cameraSocket.bind((HOST, port))
         self.recording=threading.Condition()
         self.camera=picamera.PiCamera()
         self.camera.resolution=(640,480)
@@ -51,11 +51,14 @@ class CommandThread(threading.Thread):
         print('Command socket awaiting messages')
         (self.connection, addr) = self.commSocket.accept()
         print('Connected')
+        port=0
         try:
             while True:
                 command = self.connection.recv(1024).decode()
                 if command == 'startCam':
-                    self.cameraThread=CameraThread()
+                    self.cameraThread=CameraThread(PORT_CAMERA+port)
+                    self.connection.send(PORT_CAMERA+port)
+                    port+=1
                     self.cameraThread.start()
                 elif command == 'stopCam':
                     self.cameraThread.stopCamera()
