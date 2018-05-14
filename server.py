@@ -10,15 +10,14 @@ PORT_COMM = 12000
 PORT_CAMERA = 13000
 
 class CameraThread(threading.Thread):
-    def __init__(self, port,*args,**kwargs):
+    def __init__(self,camera, port,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.cameraSocket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.cameraSocket.bind((HOST, port))
         self.recording=threading.Condition()
-        self.camera=picamera.PiCamera()
-        self.camera.resolution=(640,480)
-        self.camera.framerate=25
+        self.camera=camera
     def run(self):
+        rec=False
         try:
             self.cameraSocket.listen(5)
             print('Camera waiting for connection')
@@ -26,14 +25,16 @@ class CameraThread(threading.Thread):
             connectionFile=self.connection.makefile('wb')
             print('Camera connected')
             self.camera.start_recording(connectionFile,format='h264',quality=25)
+            rec=True
             print('Camera started recording')
             self.recording.acquire()
             self.recording.wait()
             self.recording.release()
             self.camera.stop_recording()
-        except Exception as e:
-            self.camera.stop_recording()
+            rec=False
         finally:
+            if rec:
+                self.camera.stop_recording()
             self.connection.close()
             print('Camera stopped')
     def stopCamera(self):
@@ -46,6 +47,9 @@ class CommandThread(threading.Thread):
         super().__init__(*args,**kwargs)
         self.commSocket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.commSocket.bind((HOST, PORT_COMM))
+        self.camera=picamera.PiCamera()
+        self.camera.resolution=(640,480)
+        self.camera.framerate=25
     def run(self):
         self.commSocket.listen(5)
         print('Command socket awaiting messages')
@@ -56,7 +60,7 @@ class CommandThread(threading.Thread):
             while True:
                 command = self.connection.recv(1024).decode()
                 if command == 'startCam':
-                    self.cameraThread=CameraThread(PORT_CAMERA+port)
+                    self.cameraThread=CameraThread(self.camera,PORT_CAMERA+port)
                     self.connection.send((PORT_CAMERA+port).to_bytes(2,'little'))
                     port+=1
                     self.cameraThread.start()
