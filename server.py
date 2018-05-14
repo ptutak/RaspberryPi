@@ -57,7 +57,7 @@ class CommandThread(threading.Thread):
                 command = self.connection.recv(1024).decode()
                 if command == 'startCam':
                     self.cameraThread=CameraThread(PORT_CAMERA+port)
-                    self.connection.send(bytes([PORT_CAMERA+port]))
+                    self.connection.send((PORT_CAMERA+port).to_bytes(2,'little'))
                     port+=1
                     self.cameraThread.start()
                 elif command == 'stopCam':

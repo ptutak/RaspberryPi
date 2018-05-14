@@ -51,7 +51,7 @@ class Controls(tk.Frame):
         pass
     def startCameraButtonAction(self,event):
         self.commandSocket.send('startCam'.encode())
-        port=int(self.commandSocket.recv(1024))
+        port=int.from_bytes(self.commandSocket.recv(1024),'little')
         time.sleep(0.5)
         vlcRunArgs=['vlc','tcp/h264://'+str(HOST)+':'+str(port)]
         self.cameraProcess=subprocess.Popen(vlcRunArgs)
