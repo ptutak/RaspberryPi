@@ -19,12 +19,13 @@ class CameraThread(threading.Thread):
     def run(self):
         try:
             self.camera.resolution=(640,480)
+            self.camera.framerate=24
             self.cameraSocket.listen(5)
             print('Camera waiting for connection')
             (self.connection, address) = self.cameraSocket.accept()
             connectionFile=self.connection.makefile('wb')
             print('Camera connected')
-            self.camera.start_recording(connectionFile,format='h264',quality=40)
+            self.camera.start_recording(connectionFile,format='h264',quality=25)
             self.recording.acquire()
             self.recording.wait()
             self.recording.release()
