@@ -5,9 +5,8 @@ import sys
 import picamera
 import time
 import threading
-HOST = 'raspberry' # Server IP or Hostname
+HOST = '192.168.0.199' # Server IP or Hostname
 PORT_COMM = 12000 # Pick an open Port (1000+ recommended), must match the client sport
-commSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 PORT_CAMERA = 13000
 
 class CameraThread(threading.Thread):
@@ -49,6 +48,7 @@ class CameraThread(threading.Thread):
 class CommandThread(threading.Thread):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
+        self.commSocket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.commSocket.bind((HOST, PORT_COMM))
     def run(self):
         self.commSocket.listen(5)
