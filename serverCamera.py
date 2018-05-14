@@ -26,6 +26,7 @@ else:
         time.sleep(2)
         camera.start_recording(connectionFile,format='h264',quality=23)
         recording=True
+        """
         while True:
             command=connection.recv(1024).decode()
             if command=='stop' and recording:
@@ -36,6 +37,7 @@ else:
                 recording=True
             elif command=='quit':
                 break
+        """
     except Exception as e:
         print(e)
     finally:
