@@ -22,14 +22,16 @@ else:
         (connection, address) = cameraSocket.accept()
         connectionFile=connection.makefile('wb')
         print('Camera connected')
-        camera.start_preview()
-        time.sleep(2)
+        #camera.start_preview()
+        #time.sleep(2)
         camera.start_recording(connectionFile,format='h264',quality=23)
         recording=True
+        while recording:
+            pass
     except BrokenPipeError as e:
         print(e)
         print('hello')
-    finally:
         if recording:
             camera.stop_recording()
+    finally:
         connection.close()
