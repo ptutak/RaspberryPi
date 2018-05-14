@@ -59,6 +59,7 @@ class CommandThread(threading.Thread):
                     self.cameraThread.start()
                 elif command == 'stopCam':
                     self.cameraThread.stopCamera()
+                    self.cameraThread=None
                 elif command == 'quit':
                     break
         except Exception as e:
