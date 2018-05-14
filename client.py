@@ -51,14 +51,14 @@ class Controls(tk.Frame):
     def rightButtonAction(self,event):
         pass
     def startCameraButtonAction(self,event):
-        self.commandSocket.send('startCam')
+        self.commandSocket.send('startCam'.encode())
         time.sleep(0.5)
-        vlcRunArgs=['vlc','tcp/h264://'+HOST+':'+PORT_CAMERA]
+        vlcRunArgs=['vlc','tcp/h264://'+str(HOST)+':'+str(PORT_CAMERA)]
         self.cameraProcess=subprocess.Popen(vlcRunArgs)
     def stopCameraButtonAction(self,event):
         if self.cameraProcess:
             self.cameraProcess.terminate()
-        self.commandSocket.send('stopCam')
+        self.commandSocket.send('stopCam'.encode())
     def exitButtonAction(self,event):
         self.parent.destroy()
 
