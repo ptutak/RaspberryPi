@@ -25,7 +25,9 @@ class CameraThread(threading.Thread):
             connectionFile=self.connection.makefile('wb')
             print('Camera connected')
             self.camera.start_recording(connectionFile,format='h264',quality=23)
+            self.recording.acquire()
             self.recording.wait()
+            self.recording.release()
             self.camera.stop_recording()
         except Exception as e:
             print(e)
