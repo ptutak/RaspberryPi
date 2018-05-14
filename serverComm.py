@@ -5,8 +5,8 @@ import sys
 import picamera
 import time
 import threading
-HOST = '192.168.0.199' # Server IP or Hostname
-PORT_COMM = 12000 # Pick an open Port (1000+ recommended), must match the client sport
+HOST = '192.168.0.199'
+PORT_COMM = 12000
 PORT_CAMERA = 13000
 
 class CameraThread(threading.Thread):
@@ -35,6 +35,7 @@ class CameraThread(threading.Thread):
             self.camera.stop_recording()
         finally:
             self.connection.close()
+            print('Camera stopped')
     def stopCamera(self):
         self.recording.notify_all()
 
@@ -51,17 +52,19 @@ class CommandThread(threading.Thread):
         try:
             while True:
                 command = self.connection.recv(1024).decode()
-                if command == 'Hello':
-                    self.connection.send('Hello there!'.encode())
+                if command == 'startCam':
+                    self.cameraThread=CameraThread()
+                    self.cameraThread.start()
+                if command == 'stopCam':
+                    self.cameraThread.stopCamera()
                 elif command == 'quit':
                     break
         except Exception as e:
             print(e)
         finally:
             self.connection.close()
+            print('Command stopped')
 
 if __name__=='__main__':
-    cameraT=CameraThread()
     commandT=CommandThread()
-    cameraT.start()
     commandT.start()

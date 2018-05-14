@@ -10,23 +10,22 @@ import socket
 import cv2
 import tkinter as tk
 import numpy as np
+import time
 import subprocess
-
-HOST = '192.168.0.199' # Enter IP or Hostname of your server
-PORT_COMMAND = 12000 # Pick an open Port (1000+ recommended), must match the server port
+HOST = '192.168.0.199'
+PORT_COMMAND = 12000
 PORT_CAMERA = 13000
-commandSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-commandSocket.connect((HOST,PORT_COMMAND))
 
 #cameraSocket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 #cameraSocket.connect((HOST,PORT_CAMERA))
 
-
-
-
 class Controls(tk.Frame):
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
+    def __init__(self,parent,*args,**kwargs):
+        super().__init__(parent,*args,**kwargs)
+        self.parent=parent
+        self.cameraProcess=None
+        self.commandSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.commandSocket.connect((HOST,PORT_COMMAND))
         self.yScroll=tk.Scrollbar(self,orient=tk.VERTICAL)
         self.yScroll.grid(row=0,column=4,sticky=tk.N+tk.S)
         self.infoStr=tk.StringVar()
@@ -52,12 +51,16 @@ class Controls(tk.Frame):
     def rightButtonAction(self,event):
         pass
     def startCameraButtonAction(self,event):
-        vlcRunArgs=['vlc','tcp/h264://192.168.0.199:13000']
-        subprocess.call(vlcRunArgs)
+        self.commandSocket.send('startCam')
+        time.sleep(0.5)
+        vlcRunArgs=['vlc','tcp/h264://'+HOST+':'+PORT_CAMERA]
+        self.cameraProcess=subprocess.Popen(vlcRunArgs)
     def stopCameraButtonAction(self,event):
-        pass
+        if self.cameraProcess:
+            self.cameraProcess.terminate()
+        self.commandSocket.send('stopCam')
     def exitButtonAction(self,event):
-        pass
+        self.parent.destroy()
 
 if __name__=='__main__':
     root=tk.Tk()
