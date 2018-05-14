@@ -24,7 +24,7 @@ class CameraThread(threading.Thread):
             (self.connection, address) = self.cameraSocket.accept()
             connectionFile=self.connection.makefile('wb')
             print('Camera connected')
-            self.camera.start_recording(connectionFile,format='h264',quality=23)
+            self.camera.start_recording(connectionFile,format='h264',quality=40)
             self.recording.acquire()
             self.recording.wait()
             self.recording.release()
