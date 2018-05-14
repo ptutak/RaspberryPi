@@ -37,7 +37,9 @@ class CameraThread(threading.Thread):
             self.connection.close()
             print('Camera stopped')
     def stopCamera(self):
+        self.recording.acquire()
         self.recording.notify_all()
+        self.recording.release()
 
 class CommandThread(threading.Thread):
     def __init__(self,*args,**kwargs):
@@ -55,7 +57,7 @@ class CommandThread(threading.Thread):
                 if command == 'startCam':
                     self.cameraThread=CameraThread()
                     self.cameraThread.start()
-                if command == 'stopCam':
+                elif command == 'stopCam':
                     self.cameraThread.stopCamera()
                 elif command == 'quit':
                     break
