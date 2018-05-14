@@ -26,18 +26,9 @@ else:
         time.sleep(2)
         camera.start_recording(connectionFile,format='h264',quality=23)
         recording=True
-        while True:
-            command=connection.recv(1024).decode()
-            if command=='stop' and recording:
-                camera.stop_recording()
-                recording=False
-            elif command=='start' and not recording:
-                camera.start_recording(connection,format='h264',quality=23)
-                recording=True
-            elif command=='quit':
-                break
-    except Exception as e:
+    except BrokenPipeError as e:
         print(e)
+        print('hello')
     finally:
         if recording:
             camera.stop_recording()
