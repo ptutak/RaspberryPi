@@ -60,13 +60,17 @@ class CommandThread(threading.Thread):
             while True:
                 command = self.connection.recv(1024).decode()
                 if command == 'startCam':
-                    self.cameraThread=CameraThread(self.camera,PORT_CAMERA+port)
-                    self.connection.send((PORT_CAMERA+port).to_bytes(2,'little'))
-                    port+=1
-                    self.cameraThread.start()
+                    if not self.cameraThread:
+                        self.cameraThread=CameraThread(self.camera,PORT_CAMERA+port)
+                        self.connection.send((PORT_CAMERA+port).to_bytes(2,'little'))
+                        port+=1
+                        if port==1000:
+                            port=0
+                        self.cameraThread.start()
                 elif command == 'stopCam':
-                    self.cameraThread.stopCamera()
-                    self.cameraThread=None
+                    if self.cameraThread:
+                        self.cameraThread.stopCamera()
+                        self.cameraThread=None
                 elif command == 'quit':
                     break
         except Exception as e:
