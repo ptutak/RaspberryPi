@@ -77,14 +77,23 @@ class CommandThread(threading.Thread):
                         self.cameraThread.stopCamera()
                         self.cameraThread=None
                 elif command.startswith('servo'):
-                    command=command.split()
-                    dc=float(command[1])
-                    if dc>100.0:
-                        dc=100.0
-                    elif dc<0.0:
-                        dc=0.0
-                    print('servo',dc)
-                    self.servo.ChangeDutyCycle(dc)
+                    command=command.split()[1]
+                    if command=='neutral':
+                        self.servo.ChangeDutyCycle(6.7)
+                    elif command=='left':
+                        self.servo.ChangeDutyCycle(10.0)
+                        time.sleep(0.01)
+                        self.servo.ChangeDutyCycle(1.0)
+                    elif command=='right':
+                        self.servo.ChangeDutyCycle(4.0)
+                        time.sleep(0.01)
+                        self.servo.ChangeDutyCycle(1.0)
+                    elif command=='stop':
+                        self.servo.ChangeDutyCycle(1.0)
+                    elif command=='fullLeft':
+                        self.servo.ChangeDutyCycle(10.0)
+                    elif command=='fullRight':
+                        self.servo.ChangeDutyCycle(4.0)
                 elif command == 'quit':
                     break
         except Exception as e:

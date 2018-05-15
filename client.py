@@ -13,9 +13,6 @@ import subprocess
 HOST = '192.168.0.199'
 PORT_COMMAND = 12000
 
-#cameraSocket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-#cameraSocket.connect((HOST,PORT_CAMERA))
-
 class Controls(tk.Frame):
     def __init__(self,parent,*args,**kwargs):
         super().__init__(parent,*args,**kwargs)
