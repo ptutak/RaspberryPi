@@ -80,12 +80,12 @@ class CommandThread(threading.Thread):
                     command=command.split()
                     self.servo.ChangeDutyCycle(float(command[1]))
                 elif command == 'quit':
-                    self.servo.stop()
-                    GPIO.cleanup()
                     break
         except Exception as e:
             print(e)
         finally:
+            self.servo.stop()
+            GPIO.cleanup()
             self.connection.close()
             print('Command stopped')
 

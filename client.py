@@ -45,10 +45,11 @@ class Controls(tk.Frame):
         self.exitButton.bind('<Button-1>',self.exitButtonAction)
         self.servo=0
     def leftButtonAction(self,event):
-        self.servo+=5
-        self.commandSocket.send('servo {0.1f}'.format(self.servo).encode())
+        self.servo-=5
+        self.commandSocket.send('servo {0:.1f}'.format(self.servo).encode())
     def rightButtonAction(self,event):
-        pass
+        self.servo+=5
+        self.commandSocket.send('servo {0:.1f}'.format(self.servo).encode())
     def startCameraButtonAction(self,event):
         self.commandSocket.send('startCam'.encode())
         port=int.from_bytes(self.commandSocket.recv(1024),'little')
@@ -61,6 +62,7 @@ class Controls(tk.Frame):
             self.cameraProcess=None
         self.commandSocket.send('stopCam'.encode())
     def exitButtonAction(self,event):
+        self.commandSocket.send('quit'.encode())
         if self.cameraProcess:
             self.cameraProcess.terminate()
         self.parent.destroy()
