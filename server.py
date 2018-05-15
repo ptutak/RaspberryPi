@@ -83,14 +83,14 @@ class CommandThread(threading.Thread):
                         self.servo.ChangeDutyCycle(6.7)
                     elif command=='left':
                         self.servo.ChangeDutyCycle(10.0)
-                        time.sleep(0.01)
-                        self.servo.ChangeDutyCycle(1.0)
+                        time.sleep(0.05)
+                        self.servo.ChangeDutyCycle(15.0)
                     elif command=='right':
                         self.servo.ChangeDutyCycle(4.0)
-                        time.sleep(0.01)
-                        self.servo.ChangeDutyCycle(1.0)
+                        time.sleep(0.05)
+                        self.servo.ChangeDutyCycle(15.0)
                     elif command=='stop':
-                        self.servo.ChangeDutyCycle(1.0)
+                        self.servo.ChangeDutyCycle(15.0)
                     elif command=='fullLeft':
                         self.servo.ChangeDutyCycle(10.0)
                     elif command=='fullRight':
@@ -102,6 +102,7 @@ class CommandThread(threading.Thread):
         finally:
             self.servo.stop()
             GPIO.cleanup()
+            self.connection.shutdown()
             self.connection.close()
             print('Command stopped')
 
