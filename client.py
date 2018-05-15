@@ -28,12 +28,12 @@ class Controls(tk.Frame):
         self.infoStr=tk.StringVar()
         self.info=tk.Listbox(self,yscrollcommand=self.yScroll.set,listvariable=self.infoStr)
         self.info.grid(row=0,column=0,columnspan=4,sticky=tk.N+tk.S+tk.W+tk.E)
-        self.leftButton=tk.Button(self,text='Left')
+        self.leftButton=tk.Button(self,text='-')
         self.leftButton.grid(row=1,column=0)
-        self.leftButton.bind('<Button-1>',self.leftButtonAction)
-        self.rightButton=tk.Button(self,text='Right')
+        self.leftButton.bind('<Button-1>',self.minusButtonAction)
+        self.rightButton=tk.Button(self,text='+')
         self.rightButton.grid(row=1,column=1)
-        self.rightButton.bind('<Button-1>',self.rightButtonAction)
+        self.rightButton.bind('<Button-1>',self.plusButtonAction)
         self.startCameraButton=tk.Button(self,text='Start Camera')
         self.startCameraButton.grid(row=1,column=2)
         self.startCameraButton.bind('<Button-1>',self.startCameraButtonAction)
@@ -43,12 +43,12 @@ class Controls(tk.Frame):
         self.exitButton=tk.Button(self,text='Exit')
         self.exitButton.grid(row=1,column=4)
         self.exitButton.bind('<Button-1>',self.exitButtonAction)
-        self.servo=0
-    def leftButtonAction(self,event):
-        self.servo-=5
+        self.servo=0.0
+    def minusButtonAction(self,event):
+        self.servo-=5.0
         self.commandSocket.send('servo {0:.1f}'.format(self.servo).encode())
-    def rightButtonAction(self,event):
-        self.servo+=5
+    def plusButtonAction(self,event):
+        self.servo+=5.0
         self.commandSocket.send('servo {0:.1f}'.format(self.servo).encode())
     def startCameraButtonAction(self,event):
         self.commandSocket.send('startCam'.encode())

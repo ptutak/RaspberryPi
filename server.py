@@ -78,7 +78,9 @@ class CommandThread(threading.Thread):
                         self.cameraThread=None
                 elif command.startswith('servo'):
                     command=command.split()
-                    self.servo.ChangeDutyCycle(float(command[1]))
+                    dc=float(command[1])
+                    print('servo',dc)
+                    self.servo.ChangeDutyCycle(dc)
                 elif command == 'quit':
                     break
         except Exception as e:
