@@ -55,6 +55,7 @@ class CommandThread(threading.Thread):
         GPIO.setup(12, GPIO.OUT)
         self.servo = GPIO.PWM(12, 50)
         self.servo.start(0)
+        self.cameraThread=None
     def run(self):
         self.commSocket.listen(5)
         print('Command socket awaiting messages')
