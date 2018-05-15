@@ -45,10 +45,14 @@ class Controls(tk.Frame):
         self.exitButton.bind('<Button-1>',self.exitButtonAction)
         self.servo=0.0
     def minusButtonAction(self,event):
-        self.servo-=5.0
+        self.servo-=0.1
+        if self.servo<0.0:
+            self.servo=0.0
         self.commandSocket.send('servo {0:.1f}'.format(self.servo).encode())
     def plusButtonAction(self,event):
-        self.servo+=5.0
+        self.servo+=0.1
+        if self.servo>100.0:
+            self.servo=100.0
         self.commandSocket.send('servo {0:.1f}'.format(self.servo).encode())
     def startCameraButtonAction(self,event):
         self.commandSocket.send('startCam'.encode())

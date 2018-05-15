@@ -79,6 +79,10 @@ class CommandThread(threading.Thread):
                 elif command.startswith('servo'):
                     command=command.split()
                     dc=float(command[1])
+                    if dc>100.0:
+                        dc=100.0
+                    elif dc<0.0:
+                        dc=0.0
                     print('servo',dc)
                     self.servo.ChangeDutyCycle(dc)
                 elif command == 'quit':
