@@ -103,7 +103,6 @@ class CommandThread(threading.Thread):
         finally:
             self.servo.stop()
             GPIO.cleanup()
-            self.connection.shutdown(socket.SHUT_RDWR)
             self.connection.close()
             print('Command stopped')
 
