@@ -78,6 +78,7 @@ class CommandThread(threading.Thread):
                         self.cameraThread=None
                 elif command.startswith('servo'):
                     command=command.split()[1]
+                    print(command)
                     if command=='neutral':
                         self.servo.ChangeDutyCycle(6.7)
                     elif command=='left':
