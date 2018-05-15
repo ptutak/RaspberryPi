@@ -52,7 +52,7 @@ class Controls(tk.Frame):
         self.cameraProcess=subprocess.Popen(vlcRunArgs)
     def stopCameraButtonAction(self,event):
         if self.cameraProcess:
-            self.cameraProcess.terminate()
+            self.cameraProcess.kill()
             self.cameraProcess=None
         self.commandSocket.send('stopCam'.encode())
     def exitButtonAction(self,event):
