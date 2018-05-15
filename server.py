@@ -1,13 +1,31 @@
 # -*- coding: utf-8 -*-
 
 import socket
-import sys
 import picamera
-import time
 import threading
+import time
+import RPi.GPIO as GPIO
 HOST = '192.168.0.199'
 PORT_COMM = 12000
 PORT_CAMERA = 13000
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(12, GPIO.OUT)
+
+p = GPIO.PWM(12, 50)
+p.start(0)
+try:
+    while True:
+        for dc in range(0, 101, 5):
+            p.ChangeDutyCycle(dc)
+            time.sleep(0.1)
+        for dc in range(100, -1, -5):
+            p.ChangeDutyCycle(dc)
+            time.sleep(0.1)
+except KeyboardInterrupt:
+    pass
+p.stop()
+GPIO.cleanup()
 
 class CameraThread(threading.Thread):
     def __init__(self,camera, port,*args,**kwargs):

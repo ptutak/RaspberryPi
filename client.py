@@ -7,9 +7,7 @@ Created on Wed May  9 12:12:08 2018
 """
 
 import socket
-import cv2
 import tkinter as tk
-import numpy as np
 import time
 import subprocess
 HOST = '192.168.0.199'
