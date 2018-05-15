@@ -43,8 +43,10 @@ class Controls(tk.Frame):
         self.exitButton=tk.Button(self,text='Exit')
         self.exitButton.grid(row=1,column=4)
         self.exitButton.bind('<Button-1>',self.exitButtonAction)
+        self.servo=0
     def leftButtonAction(self,event):
-        pass
+        self.servo+=5
+        self.commandSocket.send('servo {0.1f}'.format(self.servo).encode())
     def rightButtonAction(self,event):
         pass
     def startCameraButtonAction(self,event):

@@ -9,23 +9,6 @@ HOST = '192.168.0.199'
 PORT_COMM = 12000
 PORT_CAMERA = 13000
 
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(12, GPIO.OUT)
-
-p = GPIO.PWM(12, 50)
-p.start(0)
-try:
-    while True:
-        for dc in range(0, 101, 5):
-            p.ChangeDutyCycle(dc)
-            time.sleep(0.1)
-        for dc in range(100, -1, -5):
-            p.ChangeDutyCycle(dc)
-            time.sleep(0.1)
-except KeyboardInterrupt:
-    pass
-p.stop()
-GPIO.cleanup()
 
 class CameraThread(threading.Thread):
     def __init__(self,camera, port,*args,**kwargs):
@@ -68,6 +51,10 @@ class CommandThread(threading.Thread):
         self.camera=picamera.PiCamera()
         self.camera.resolution=(640,480)
         self.camera.framerate=25
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(12, GPIO.OUT)
+        self.servo = GPIO.PWM(12, 50)
+        self.servo.start(0)
     def run(self):
         self.commSocket.listen(5)
         print('Command socket awaiting messages')
@@ -89,7 +76,12 @@ class CommandThread(threading.Thread):
                     if self.cameraThread:
                         self.cameraThread.stopCamera()
                         self.cameraThread=None
+                elif command.startswith('servo'):
+                    command=command.split()
+                    self.servo.ChangeDutyCycle(float(command[1]))
                 elif command == 'quit':
+                    self.servo.stop()
+                    GPIO.cleanup()
                     break
         except Exception as e:
             print(e)
