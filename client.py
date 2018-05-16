@@ -12,7 +12,19 @@ import time
 import subprocess
 HOST = '192.168.0.199'
 PORT_COMMAND = 12000
+HOST = input('ip host (default 192.168.0.199):')
+if HOST=='':
+    HOST='192.168.0.199'
 
+print('host: ',HOST)
+
+PORT_COMMAND = input('comm port (default 12000):')
+if PORT_COMMAND=='':
+    PORT_COMMAND=12000
+else:
+    PORT_COMMAND=int(PORT_COMMAND)
+    
+print('comm port:',PORT_COMMAND)
 class Controls(tk.Frame):
     def __init__(self,parent,*args,**kwargs):
         super().__init__(parent,*args,**kwargs)

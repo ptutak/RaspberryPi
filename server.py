@@ -5,10 +5,24 @@ import picamera
 import threading
 import time
 import RPi.GPIO as GPIO
-HOST = '192.168.0.199'
-PORT_COMM = 12000
-PORT_CAMERA = 13000
+HOST = input('ip host (default 192.168.0.199):')
+if HOST=='':
+    HOST='192.168.0.199'
+print('host: ',HOST)
 
+PORT_COMM = input('comm port (default 12000):')
+if PORT_COMM=='':
+    PORT_COMM=12000
+else:
+    PORT_COMM=int(PORT_COMM)
+print('comm port: ',PORT_COMM)
+
+PORT_CAMERA=input('camera port (default 13000):')
+if PORT_CAMERA=='':
+    PORT_CAMERA = 13000
+else:
+    PORT_CAMERA=int(PORT_CAMERA)
+print('camera port: ',PORT_CAMERA)
 
 class CameraThread(threading.Thread):
     def __init__(self,camera, port,*args,**kwargs):
