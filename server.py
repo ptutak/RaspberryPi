@@ -111,10 +111,17 @@ class CommandThread(threading.Thread):
                     elif command=='fullRight':
                         self.servo.ChangeDutyCycle(4.0)
                 elif command == 'quit':
+                    if self.cameraThread:
+                        self.cameraThread.stopCamera()
+                        self.cameraThread=None
                     break
         except Exception as e:
             print(e)
         finally:
+            if self.cameraThread:
+                self.cameraThread.stopCamera()
+                self.cameraThread=None
+            
             self.servo.stop()
             GPIO.cleanup()
             self.connection.close()
